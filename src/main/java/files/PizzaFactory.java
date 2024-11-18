@@ -2,17 +2,17 @@ package files;
 
 public interface PizzaFactory {
 
-    Pizza createDeluxe();
+    Pizza createDeluxe(Size size);
 
-    Pizza createMeatzza();
+    Pizza createMeatzza(Size size);
 
-    Pizza createBBQChicken();
+    Pizza createBBQChicken(Size size);
 
-    Pizza createBuildYourOwn();
+    Pizza createBuildYourOwn(Size size, List<Topping> toppings);
 }
 
-public class ChicagoPizza implements PizzaFactory {
-}
+// public class ChicagoPizza implements PizzaFactory {
+// }
 
-public class NYPizza implements PizzaFactory {
-}
+// public class NYPizza implements PizzaFactory {
+// }

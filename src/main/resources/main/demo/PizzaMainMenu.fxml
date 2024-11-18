@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="main.demo.ClinicManagerMain">
+    <!-- Root Container: VBox for vertical layout -->
+    <VBox alignment="CENTER" spacing="20" padding="20">
+        <!-- Title of the Menu -->
+        <Text fx:id="menuTitle" text="RU Pizzeria - Main Menu" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+        <!-- Buttons for different options in the Main Menu -->
+        <VBox spacing="10">
+            <!-- Create New Order Button -->
+            <Button fx:id="createOrderButton" text="Create New Order" style="-fx-font-size: 16px;" maxWidth="200"/>
+
+            <!-- Browse Past Orders Button -->
+            <Button fx:id="browseOrdersButton" text="Browse Past Orders" style="-fx-font-size: 16px;" maxWidth="200"/>
+
+            <!-- Export Orders Button -->
+            <Button fx:id="exportOrdersButton" text="Export Orders" style="-fx-font-size: 16px;" maxWidth="200"/>
+        </VBox>
+
+        <!-- Status Label to show messages like "Loading..." or "Select an Option" -->
+        <Label fx:id="statusLabel" text="Select an option to begin" style="-fx-font-size: 14px; -fx-font-style: italic;"/>
+
+    </VBox>
+    
+    <!-- Bottom Navigation (Optional for additional controls like "Exit") -->
+    <HBox alignment="CENTER" spacing="15" padding="20">
+        <Button fx:id="exitButton" text="Exit" style="-fx-font-size: 16px; -fx-font-weight: bold;" maxWidth="150"/>
+    </HBox>
+</AnchorPane>

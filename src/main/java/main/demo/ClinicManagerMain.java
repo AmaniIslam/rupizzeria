@@ -8,10 +8,10 @@ import javafx.stage.Stage;
 public class ClinicManagerMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("clinic-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/demo/PizzaMainMenu.fxml"));
         Scene scene = new Scene(loader.load());
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Clinic Manager");
+        primaryStage.setTitle("Pizza Orders");
 
         primaryStage.setOnCloseRequest(event -> {
             primaryStage.close();
