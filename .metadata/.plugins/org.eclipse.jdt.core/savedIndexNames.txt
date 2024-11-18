@@ -1,0 +1,5 @@
+INDEX VERSION 1.134+C:\Users\Amani Islam\OneDrive\SoftMeth\ruclinicthree\.metadata\.plugins\org.eclipse.jdt.core
+2902450110.index
+3802073567.index
+145148812.index
+1865797976.index

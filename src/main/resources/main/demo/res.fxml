@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="395.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.demo.Res">
+
+    <children>
+        <!-- Title Label -->
+        <Label layoutX="102.0" layoutY="20.0" text="Reschedule Appointment" />
+
+        <!-- New Appointment Date -->
+        <Label layoutX="20.0" layoutY="60.0" text="New Date:" />
+        <DatePicker fx:id="newAppointmentDate" layoutX="100.0" layoutY="60.0" />
+
+        <!-- Reschedule Button -->
+        <Button layoutX="100.0" layoutY="100.0" onAction="#handleSubmitReschedule" text="Reschedule" />
+
+        <!-- Back Button -->
+        <Button layoutX="20.0" layoutY="100.0" onAction="#handleBackAction" text="Back" />
+    </children>
+</AnchorPane>
