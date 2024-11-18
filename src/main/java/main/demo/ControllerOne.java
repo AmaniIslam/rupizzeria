@@ -22,11 +22,12 @@ import java.util.*;
 import javafx.scene.control.ToggleGroup;
 
 /**
- * Controller class for managing clinic operations, including scheduling appointments and handling provider information.
+ * Controller class for managing clinic operations, including scheduling
+ * appointments and handling provider information.
+ *
  * @author Amani Islam *
  */
-
-public class ClinicManagerController {
+public class ControllerOne {
 
     private List<Appointment> appointments;
     private List<Provider> providers;
@@ -35,9 +36,10 @@ public class ClinicManagerController {
     private List<Person> patients;
 
     /**
-     * Constructs a new ClinicManagerController, initializing empty lists for appointments, providers, technicians, and patients.
+     * Constructs a new ClinicManagerController, initializing empty lists for
+     * appointments, providers, technicians, and patients.
      */
-    public ClinicManagerController() {
+    public ControllerOne() {
         appointments = new List<>();
         providers = new List<>();
         technicians = new List<>();
@@ -46,7 +48,8 @@ public class ClinicManagerController {
     }
 
     /**
-     * Reads provider data from a file and initializes the list of providers and technicians based on the file's contents.
+     * Reads provider data from a file and initializes the list of providers and
+     * technicians based on the file's contents.
      *
      */
     public void run() {
@@ -80,7 +83,9 @@ public class ClinicManagerController {
     }
 
     /**
-     * Handles the scheduling of an office appointment. Opens a form for entering patient and appointment details, then validates and submits the appointment.
+     * Handles the scheduling of an office appointment. Opens a form for
+     * entering patient and appointment details, then validates and submits the
+     * appointment.
      */
     @FXML
     private void handleScheduleOffice() {
@@ -116,24 +121,24 @@ public class ClinicManagerController {
         submitButton.setOnAction(e -> {
             errorLabel.setText("");
 
-            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty() ||
-                    firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
-                    dobField.getText().isEmpty() || npiField.getText().isEmpty()) {
+            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty()
+                    || firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()
+                    || dobField.getText().isEmpty() || npiField.getText().isEmpty()) {
                 errorLabel.setText("Please fill in all fields.");
                 return;
             }
 
             Date date;
             try {
-            date = new Date(dateField.getText());
-            if (!date.isValid()) {
-                errorLabel.setText("Invalid date");
-                return;}
+                date = new Date(dateField.getText());
+                if (!date.isValid()) {
+                    errorLabel.setText("Invalid date");
+                    return;
+                }
             } catch (NumberFormatException | NoSuchElementException ex) {
                 errorLabel.setText("Invalid date.");
                 return;
             }
-
 
             try {
                 int timeslot = Integer.parseInt(timeslotField.getText());
@@ -160,7 +165,6 @@ public class ClinicManagerController {
                 errorLabel.setText("Invalid dob.");
                 return;
             }
-
 
             Person patient = new Person(new Profile(firstNameField.getText(), lastNameField.getText(), dob));
             if (!patients.contains(patient)) {
@@ -231,7 +235,9 @@ public class ClinicManagerController {
     }
 
     /**
-     * Handles the scheduling of an imaging appointment. Opens a form for entering patient and appointment details, then validates and submits the appointment.
+     * Handles the scheduling of an imaging appointment. Opens a form for
+     * entering patient and appointment details, then validates and submits the
+     * appointment.
      */
     @FXML
     private void handleScheduleImaging() {
@@ -243,7 +249,6 @@ public class ClinicManagerController {
         gridPane.setPadding(new Insets(20));
         gridPane.setVgap(10);
         gridPane.setHgap(10);
-
 
         TextArea errorLabel = new TextArea();
         errorLabel.setStyle("-fx-text-fill: red;");
@@ -274,20 +279,20 @@ public class ClinicManagerController {
         submitButton.setOnAction(e -> {
             errorLabel.setText("");
 
-            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty() ||
-                    firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
-                    dobField.getText().isEmpty() || serviceToggleGroup.getSelectedToggle() == null){
+            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty()
+                    || firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()
+                    || dobField.getText().isEmpty() || serviceToggleGroup.getSelectedToggle() == null) {
                 errorLabel.setText("Please fill in all fields.");
                 return;
             }
-
 
             Date date;
             try {
                 date = new Date(dateField.getText());
                 if (!date.isValid()) {
                     errorLabel.setText("Invalid date");
-                    return;}
+                    return;
+                }
             } catch (NumberFormatException | NoSuchElementException ex) {
                 errorLabel.setText("Invalid date.");
                 return;
@@ -319,7 +324,7 @@ public class ClinicManagerController {
                 return;
             }
 
-            Person patient = new Person(new Profile(firstNameField.getText(),lastNameField.getText() , dob));
+            Person patient = new Person(new Profile(firstNameField.getText(), lastNameField.getText(), dob));
 
             if (!patients.contains(patient)) {
                 patients.add(patient);
@@ -380,7 +385,6 @@ public class ClinicManagerController {
             appointmentStage.close();
         });
 
-
         gridPane.add(dateLabel, 0, 0);
         gridPane.add(dateField, 1, 0);
         gridPane.add(timeslotLabel, 0, 1);
@@ -403,7 +407,9 @@ public class ClinicManagerController {
     }
 
     /**
-     * Handles the cancelling of an appointment. Opens a form for entering patient and appointment details, then validates and cancels the appointment.
+     * Handles the cancelling of an appointment. Opens a form for entering
+     * patient and appointment details, then validates and cancels the
+     * appointment.
      */
     @FXML
     private void handleCancelAppointment() {
@@ -436,9 +442,9 @@ public class ClinicManagerController {
         submitButton.setOnAction(e -> {
             errorLabel.setText("");
 
-            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty() ||
-                    firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
-                    dobField.getText().isEmpty()) {
+            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty()
+                    || firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()
+                    || dobField.getText().isEmpty()) {
                 errorLabel.setText("Please fill in all fields.");
                 return;
             }
@@ -448,7 +454,8 @@ public class ClinicManagerController {
                 date = new Date(dateField.getText());
                 if (!date.isValid()) {
                     errorLabel.setText("Invalid date");
-                    return;}
+                    return;
+                }
             } catch (NumberFormatException | NoSuchElementException ex) {
                 errorLabel.setText("Invalid date.");
                 return;
@@ -501,9 +508,10 @@ public class ClinicManagerController {
         stage.showAndWait();
     }
 
-
     /**
-     * Handles the rescheduling of an appointment. Opens a form for entering patient and appointment details, then validates and reschedules the appointment.
+     * Handles the rescheduling of an appointment. Opens a form for entering
+     * patient and appointment details, then validates and reschedules the
+     * appointment.
      */
     @FXML
     private void handleRescheduleAppointment() {
@@ -537,9 +545,9 @@ public class ClinicManagerController {
         submitButton.setOnAction(e -> {
             errorLabel.setText("");
 
-            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty() ||
-                    firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
-                    dobField.getText().isEmpty() || newslotField.getText().isEmpty()) {
+            if (dateField.getText().isEmpty() || timeslotField.getText().isEmpty()
+                    || firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()
+                    || dobField.getText().isEmpty() || newslotField.getText().isEmpty()) {
                 errorLabel.setText("Please fill in all fields.");
                 return;
             }
@@ -549,7 +557,8 @@ public class ClinicManagerController {
                 date = new Date(dateField.getText());
                 if (!date.isValid()) {
                     errorLabel.setText("Invalid date");
-                    return;}
+                    return;
+                }
             } catch (NumberFormatException | NoSuchElementException ex) {
                 errorLabel.setText("Invalid date.");
                 return;
@@ -704,7 +713,8 @@ public class ClinicManagerController {
     }
 
     /**
-     * Displays all appointments sorted by provider location in a modal table view.
+     * Displays all appointments sorted by provider location in a modal table
+     * view.
      */
     @FXML
     private void handlePL() {
@@ -735,8 +745,8 @@ public class ClinicManagerController {
     }
 
     /**
-     * Displays all patient billing statements in a modal table view.
-     * Clears appointments after.
+     * Displays all patient billing statements in a modal table view. Clears
+     * appointments after.
      */
     @FXML
     private void handlePS() {
@@ -789,57 +799,57 @@ public class ClinicManagerController {
      * Displays all provider total credit amoutns in a modal table view.
      */
     @FXML
-        private void handlePC() {
+    private void handlePC() {
 
-            if (appointments.isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "No Appointments Available");
-                alert.showAndWait();
-                return;
-            }
+        if (appointments.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "No Appointments Available");
+            alert.showAndWait();
+            return;
+        }
 
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Provider Credit Amounts");
 
-            stage.setTitle("Provider Credit Amounts");
+        TableView<Map.Entry<String, Integer>> tableView = new TableView<>();
+        TableColumn<Map.Entry<String, Integer>, String> providerColumn = new TableColumn<>("Provider");
+        TableColumn<Map.Entry<String, Integer>, Integer> creditColumn = new TableColumn<>("Credit Amount");
 
-            TableView<Map.Entry<String, Integer>> tableView = new TableView<>();
-            TableColumn<Map.Entry<String, Integer>, String> providerColumn = new TableColumn<>("Provider");
-            TableColumn<Map.Entry<String, Integer>, Integer> creditColumn = new TableColumn<>("Credit Amount");
+        providerColumn.setCellValueFactory(entry -> new javafx.beans.property.SimpleStringProperty(entry.getValue().getKey()));
+        creditColumn.setCellValueFactory(entry -> new javafx.beans.property.SimpleIntegerProperty(entry.getValue().getValue()).asObject());
 
-            providerColumn.setCellValueFactory(entry -> new javafx.beans.property.SimpleStringProperty(entry.getValue().getKey()));
-            creditColumn.setCellValueFactory(entry -> new javafx.beans.property.SimpleIntegerProperty(entry.getValue().getValue()).asObject());
+        tableView.getColumns().add(providerColumn);
+        tableView.getColumns().add(creditColumn);
 
-            tableView.getColumns().add(providerColumn);
-            tableView.getColumns().add(creditColumn);
+        Map<String, Integer> providerCredits = new HashMap<>();
+        Sort.provider(providers);
 
-            Map<String, Integer> providerCredits = new HashMap<>();
-            Sort.provider(providers);
-
-            for (Provider provider : providers) {
-                int total = 0;
-                for (Appointment appointment : appointments) {
-                    if (appointment.getProvider().getProfile().equals(provider.getProfile())) {
-                        total += provider.rate();
-                    }
-                }
-                if (total != 0) {
-                    providerCredits.put(provider.getProfile().toString(), total);
+        for (Provider provider : providers) {
+            int total = 0;
+            for (Appointment appointment : appointments) {
+                if (appointment.getProvider().getProfile().equals(provider.getProfile())) {
+                    total += provider.rate();
                 }
             }
+            if (total != 0) {
+                providerCredits.put(provider.getProfile().toString(), total);
+            }
+        }
 
-            ObservableList<Map.Entry<String, Integer>> data = FXCollections.observableArrayList(providerCredits.entrySet());
-            tableView.setItems(data);
+        ObservableList<Map.Entry<String, Integer>> data = FXCollections.observableArrayList(providerCredits.entrySet());
+        tableView.setItems(data);
 
-            VBox vbox = new VBox(tableView);
-            Scene scene = new Scene(vbox);
-            stage.setScene(scene);
-            stage.showAndWait();
+        VBox vbox = new VBox(tableView);
+        Scene scene = new Scene(vbox);
+        stage.setScene(scene);
+        stage.showAndWait();
 
     }
 
     /**
-     * Displays all office and imaging appointments in separate tabs in a modal table view.
+     * Displays all office and imaging appointments in separate tabs in a modal
+     * table view.
      */
     @FXML
     private void handlePOI() {
@@ -850,7 +860,7 @@ public class ClinicManagerController {
             return;
         }
 
-        Sort.appointment(appointments,providers,'l');
+        Sort.appointment(appointments, providers, 'l');
 
         TabPane tabPane = new TabPane();
 
@@ -885,11 +895,12 @@ public class ClinicManagerController {
         stage.showAndWait();
     }
 
-
     /**
-     * Creates a table view displaying appointment details, including date, time, patient, and provider.
+     * Creates a table view displaying appointment details, including date,
+     * time, patient, and provider.
      *
-     * @param filteredAppointments The list of appointments to display in the table.
+     * @param filteredAppointments The list of appointments to display in the
+     * table.
      * @return TableView configured to show the appointment information.
      */
     private TableView<Appointment> createAppointmentTableView(ObservableList<Appointment> filteredAppointments) {
