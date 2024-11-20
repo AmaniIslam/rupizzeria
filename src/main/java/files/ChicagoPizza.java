@@ -1,5 +1,7 @@
 package files;
 
+import java.util.ArrayList;
+
 public class ChicagoPizza implements PizzaFactory {
 
     @Override
@@ -18,7 +20,7 @@ public class ChicagoPizza implements PizzaFactory {
     }
 
     @Override
-    public Pizza createBuildYourOwn(Size size, List<Topping> toppings) {
+    public Pizza createBuildYourOwn(Size size, ArrayList<Topping> toppings) {
         return new BuildYourOwn(size, toppings); // Create a Build Your Own pizza with size and toppings
     }
 }

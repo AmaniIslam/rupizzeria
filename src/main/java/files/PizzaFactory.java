@@ -1,5 +1,7 @@
 package files;
 
+import java.util.ArrayList;
+
 public interface PizzaFactory {
 
     Pizza createDeluxe(Size size);
@@ -8,11 +10,5 @@ public interface PizzaFactory {
 
     Pizza createBBQChicken(Size size);
 
-    Pizza createBuildYourOwn(Size size, List<Topping> toppings);
+    Pizza createBuildYourOwn(Size size, ArrayList<Topping> toppings);
 }
-
-// public class ChicagoPizza implements PizzaFactory {
-// }
-
-// public class NYPizza implements PizzaFactory {
-// }

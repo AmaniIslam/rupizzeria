@@ -9,6 +9,7 @@ module main.demo {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
 
     opens main.demo to javafx.fxml;
     exports main.demo;

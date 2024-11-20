@@ -1,13 +1,18 @@
 package files;
 
+import java.util.ArrayList;
+
 public class Deluxe extends Pizza {
+    private final double SMALL = 16.99;
+    private final double MEDIUM = 18.99;
+    private final double LARGE = 20.99;
 
     public Deluxe(Size size) {
         super(size, Crust.DEEP_DISH, createToppings());
     }
 
-    private static List<Topping> createToppings() {
-        List<Topping> toppings = new List<>();
+    private static ArrayList<Topping> createToppings() {
+        ArrayList<Topping> toppings = new ArrayList<>();
         toppings.add(Topping.SAUSAGE);
         toppings.add(Topping.PEPPERONI);
         toppings.add(Topping.GREEN_PEPPER);
@@ -18,11 +23,11 @@ public class Deluxe extends Pizza {
 
     @Override
     public double price() {
-        double basePrice = 16.99;
+        double basePrice = SMALL;
         if (getSize() == Size.MEDIUM) {
-            basePrice = 18.99;
+            basePrice = MEDIUM;
         } else if (getSize() == Size.LARGE) {
-            basePrice = 20.99;
+            basePrice = LARGE;
         }
         return basePrice;
     }

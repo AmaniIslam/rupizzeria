@@ -1,12 +1,19 @@
 package files;
 
+import java.util.ArrayList;
+
 public class BBQChicken extends Pizza {
+
+    private final double SMALL = 14.99;
+    private final double MEDIUM = 16.99;
+    private final double LARGE = 19.99;
+
     public BBQChicken(Size size) {
         super(size, Crust.PAN, createToppings());
     }
 
-    private static List<Topping> createToppings() {
-        List<Topping> toppings = new List<>();
+    private static ArrayList<Topping> createToppings() {
+        ArrayList<Topping> toppings = new ArrayList<>();
         toppings.add(Topping.BBQ_CHICKEN);
         toppings.add(Topping.GREEN_PEPPER);
         toppings.add(Topping.PROVOLONE);
@@ -16,11 +23,11 @@ public class BBQChicken extends Pizza {
 
     @Override
     public double price() {
-        double basePrice = 14.99;
+        double basePrice = SMALL;
         if (getSize() == Size.MEDIUM) {
-            basePrice = 16.99;
+            basePrice = MEDIUM;
         } else if (getSize() == Size.LARGE) {
-            basePrice = 19.99;
+            basePrice = LARGE;
         }
         return basePrice;
     }

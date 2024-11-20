@@ -5,18 +5,18 @@ import java.util.ArrayList;
 public class Order {
 
     private int number;  // Order number
-    private List<Pizza> pizzas;  // List of pizzas in this order
+    private ArrayList<Pizza> pizzas;  // List of pizzas in this order
 
     public Order(int number) {
         this.number = number;
-        this.pizzas = new List<>();
+        this.pizzas = new ArrayList<>();
     }
 
     public int getNumber() {
         return number;
     }
 
-    public List<Pizza> getPizzas() {
+    public ArrayList<Pizza> getPizzas() {
         return pizzas;
     }
 
