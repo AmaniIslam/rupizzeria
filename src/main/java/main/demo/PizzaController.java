@@ -198,7 +198,49 @@ public class PizzaController {
     // This method is called when the "Current Order" button is clicked
     @FXML
     private void onCurrentOrderButtonClicked() {
-        showAlert("Current Order", "You clicked on the Current Order button!");
+        Stage orderStage = new Stage();
+        orderStage.setTitle("Current Orders");
+
+        VBox orderLayout = new VBox(10);
+        orderLayout.setPadding(new Insets(15));
+
+        Label headerLabel = new Label("Current Order Details:");
+        orderLayout.getChildren().add(headerLabel);
+
+        // If there are no pizzas in the order, display a message
+        if (order.getPizzas().isEmpty()) {
+            Label noPizzasLabel = new Label("No pizzas have been added to the order yet.");
+            orderLayout.getChildren().add(noPizzasLabel);
+        } else {
+            // Otherwise, iterate through the pizzas in the order and display their details
+            for (Pizza pizza : order.getPizzas()) {
+                // Prepare the toppings list as a string
+                String toppingsList = pizza.getToppings().isEmpty() ? "No toppings" : String.join(", ", pizza.getToppings().toString());
+
+                // Create a label for each pizza's details
+                String pizzaDetails = String.format("Style: %s\nType: %s\nSize: %s\nCrust: %s\nToppings: %s\nPrice: $%.2f",
+                        pizza.getClass().getSimpleName(), // Class name as style/type (assuming style is derived from the class name)
+                        pizza.getClass().getSimpleName(), // Same here for pizza type (could be more specific if needed)
+                        pizza.getSize(),
+                        pizza.getCrust(),
+                        toppingsList,
+                        pizza.price());
+                
+                Label pizzaLabel = new Label(pizzaDetails);
+                orderLayout.getChildren().add(pizzaLabel);
+            }
+        }
+
+        // Add a "Close" button to close the order window
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> orderStage.close());
+        orderLayout.getChildren().add(closeButton);
+
+        // Set up the scene and show the window
+        Scene orderScene = new Scene(orderLayout, 400, 300);
+        orderStage.setScene(orderScene);
+        orderStage.show();
+        //showAlert("Current Order", "You clicked on the Current Order button!");
     }
 
     // This method is called when the "Store Orders" button is clicked
