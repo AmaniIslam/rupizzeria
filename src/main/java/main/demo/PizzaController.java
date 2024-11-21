@@ -24,7 +24,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
-
+/**
+ * Controller class for handling pizza orders and interactions in the pizza ordering system.
+ * This class manages pizza selection, customization, order handling, and order export functionalities.
+ * @author Amani Islam
+ * @author Aryan Rejo
+ */
 public class PizzaController {
 
     private ArrayList<Order> orders;
@@ -39,13 +44,9 @@ public class PizzaController {
 
     // FXML elements linked to UI components in the FXML file
 
-
-    @FXML
-    private Button currentOrderButton;
-
-    @FXML
-    private Button storeOrdersButton;
-
+    /**
+     * Handles the event of selecting a pizza. Opens a window for selecting pizza style, type, and size.
+     */
     @FXML
     private void handlePizza() {
         Stage primaryStage = new Stage();
@@ -114,6 +115,13 @@ public class PizzaController {
         primaryStage.show();
     }
 
+    /**
+     * Opens the customization window where users can add toppings and view pizza details.
+     *
+     * @param current The selected pizza to customize.
+     * @param style   The selected pizza style.
+     * @param type    The selected pizza type.
+     */
     private void openCustomizationWindow(Pizza current, PizzaStyle style, String type) {
         Stage customizationStage = new Stage();
         customizationStage.setTitle("Customize Your Pizza");
@@ -217,6 +225,11 @@ public class PizzaController {
         customizationStage.show();
     }
 
+    /**
+     * Displays an error alert with the given message.
+     *
+     * @param message The message to display in the error alert.
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -224,18 +237,21 @@ public class PizzaController {
         alert.showAndWait();
     }
 
-    // This method is called when the "Current Order" button is clicked
-    @FXML
+    /**
+     * Handles the event when the "Current Order" button is clicked.
+     * Displays the details of the current order, including pizzas, their toppings,
+     * and the order total. Allows the user to remove individual pizzas or clear the entire order.
+     */    @FXML
     private void handleCurrentOrder() {
         Stage orderStage = new Stage();
         orderStage.setTitle("Current Orders");
-    
+
         VBox orderLayout = new VBox(10);
         orderLayout.setPadding(new Insets(15));
-    
+
         Label headerLabel = new Label("Current Order Details:");
         orderLayout.getChildren().add(headerLabel);
-    
+
         // If there are no pizzas in the order, display a message
         if (order.getPizzas().isEmpty()) {
             Label noPizzasLabel = new Label("No pizzas have been added to the order yet.");
@@ -245,19 +261,19 @@ public class PizzaController {
             for (Pizza pizza : order.getPizzas()) {
                 // Prepare the toppings list as a string
                 String toppingsList = pizza.getToppings().isEmpty() ? "No toppings" : String.join(", ", pizza.getToppings().toString());
-    
+
                 // Create a label for each pizza's details
                 String pizzaDetails = String.format("Style: %s\nType: %s\nSize: %s\nCrust: %s\nToppings: %s\nPrice: $%.2f",
-                        pizza.getClass().getSimpleName(),
+                        pizza.getStyle(),
                         pizza.getClass().getSimpleName(),
                         pizza.getSize(),
                         pizza.getCrust(),
                         toppingsList,
                         pizza.price());
-    
+
                 Label pizzaLabel = new Label(pizzaDetails);
                 orderLayout.getChildren().add(pizzaLabel);
-    
+
                 // Add a "Remove" button next to each pizza
                 Button removeButton = new Button("Remove");
                 removeButton.setOnAction(e -> {
@@ -269,7 +285,7 @@ public class PizzaController {
                 });
                 orderLayout.getChildren().add(removeButton);
             }
-    
+
             // Add subtotal, tax, and total price
             Label subtotalLabel = new Label("Subtotal: $" + String.format("%.2f", order.getSubtotal()));
             Label taxLabel = new Label("Tax: $" + String.format("%.2f", order.getTax()));
@@ -301,13 +317,18 @@ public class PizzaController {
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> orderStage.close());
         orderLayout.getChildren().addAll(closeButton);
-    
+
         Scene orderScene = new Scene(orderLayout, 400, 300);
         orderStage.setScene(orderScene);
         orderStage.show();
         //showAlert("Current Order", "You clicked on the Current Order button!");
     }
 
+    /**
+     * Handles the event when the "Manage Orders" button is clicked.
+     * Displays a list of all orders placed, including each pizza's details (type, size, crust, toppings).
+     * Allows the user to cancel an order and refreshes the view to reflect changes.
+     */
     @FXML
     private void handleOrders() {
         if (orders.isEmpty()) { // Check if there are no orders
@@ -386,6 +407,11 @@ public class PizzaController {
         ordersStage.show();
     }
 
+    /**
+     * Exports the details of all orders to a text file.
+     * If no orders are available, an alert is shown to the user.
+     * Writes order information, including pizzas, toppings, price, subtotal, tax, and total, to the selected file.
+     */
     private void exportOrders() {
         if (orders.isEmpty()) { // Check if there are no orders
             showAlert("No Orders Found", "There are no orders to export.");
@@ -443,7 +469,12 @@ public class PizzaController {
         }
     }
 
-
+    /**
+     * Displays a confirmation alert with the given title and message.
+     *
+     * @param title   The title of the alert.
+     * @param message The message to display in the alert.
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(title);
@@ -452,5 +483,5 @@ public class PizzaController {
         alert.showAndWait();
     }
 
-    
+
 }

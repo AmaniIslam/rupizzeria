@@ -2,27 +2,57 @@ package files;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a "Build Your Own" pizza with customizable toppings and size.
+ * The price is calculated based on the pizza size and the number of toppings.
+ *
+ * @author Amani Islam
+ * @author Aryan Rejo
+ */
 public class BuildYourOwn extends Pizza {
 
+    /** Price for each topping added. */
     private final double TOPPING_PRICE = 1.69;
-    private final double SMALL = 8.99;
-    private final double MEDIUM = 10.99;
-    private final double LARGE = 12.99;
-    private ArrayList<Topping> toppings;
 
+    /** Price for a small pizza. */
+    private final double SMALL = 8.99;
+
+    /** Price for a medium pizza. */
+    private final double MEDIUM = 10.99;
+
+    /** Price for a large pizza. */
+    private final double LARGE = 12.99;
+
+    /**
+     * Constructs a Build Your Own pizza with the specified style, size, and toppings.
+     *
+     * @param style The style of the pizza (e.g., New York or Chicago).
+     * @param size The size of the pizza (Small, Medium, or Large).
+     * @param toppings The list of toppings for the pizza.
+     */
     public BuildYourOwn(PizzaStyle style, Size size, ArrayList<Topping> toppings) {
         super(style, size, getCrustBasedOnStyle(style), toppings);
-        this.toppings = toppings;
     }
 
+    /**
+     * Determines the crust type based on the pizza style.
+     *
+     * @param style The style of the pizza.
+     * @return The crust type for the pizza.
+     */
     public static Crust getCrustBasedOnStyle(PizzaStyle style) {
-        if (style == PizzaStyle.CHICAGO){
-            return Crust.PAN;
+        if (style == PizzaStyle.CHICAGO) {
+            return Crust.PAN;  // Chicago-style pizza uses a pan crust
         } else {
-            return Crust.HAND_TOSSED;
+            return Crust.HAND_TOSSED;  // New York-style pizza uses a hand-tossed crust
         }
     }
 
+    /**
+     * Calculates the price of the pizza based on its size and the number of toppings.
+     *
+     * @return The total price of the pizza.
+     */
     @Override
     public double price() {
         double basePrice = SMALL;
@@ -31,12 +61,20 @@ public class BuildYourOwn extends Pizza {
         } else if (getSize() == Size.LARGE) {
             basePrice = LARGE;
         }
-        if (getToppings() != null){
-            basePrice += getToppings().size() * TOPPING_PRICE;
+
+        if (getToppings() != null) {
+            basePrice += getToppings().size() * TOPPING_PRICE;  // Add price for each topping
         }
-        return basePrice; // Each topping adds $1.69
+
+        return basePrice;
     }
 
+    /**
+     * Main method for testing the Build Your Own pizza class.
+     * This method runs several test cases to check the price calculation.
+     *
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
         // Test Case 1: Test price with no toppings, small pizza size
         ArrayList<Topping> toppings = new ArrayList<>();
