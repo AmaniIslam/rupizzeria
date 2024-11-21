@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 public class Order {
 
-    private int number;  // Order number
-    private ArrayList<Pizza> pizzas;  // List of pizzas in this order
-    private final double TAX_RATE = 0.625; // Example: 7% tax rate
-
+    private int number;
+    private ArrayList<Pizza> pizzas;
+    private final double TAX_RATE = 0.625;
     public Order(int number) {
         this.number = number;
         this.pizzas = new ArrayList<>();
@@ -29,7 +28,6 @@ public class Order {
         pizzas.remove(pizza);
     }
 
-    // Get the total price of the order (subtotal only)
     public double getSubtotal() {
         double subtotal = 0;
         for (Pizza pizza : pizzas) {
@@ -38,18 +36,15 @@ public class Order {
         return subtotal;
     }
 
-    // Calculate tax based on subtotal
     public double getTax() {
         return getSubtotal() * TAX_RATE;
     }
 
-    // Calculate the total price (subtotal + tax)
     public double getTotal() {
         return getSubtotal() + getTax();
     }
 
-    // Get the total price of the order
     public double getTotalPrice() {
-        return getTotal();  // You can still use this if you prefer it to return the full total
+        return getTotal();
     }
 }
