@@ -6,7 +6,7 @@ public class Order {
 
     private int number;  // Order number
     private ArrayList<Pizza> pizzas;  // List of pizzas in this order
-    private final double TAX_RATE = 0.07; // Example: 7% tax rate
+    private final double TAX_RATE = 0.625; // Example: 7% tax rate
 
     public Order(int number) {
         this.number = number;
