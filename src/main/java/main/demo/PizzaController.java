@@ -214,7 +214,10 @@ public class PizzaController {
         } else {
             // Otherwise, iterate through the pizzas in the order and display their details
             for (Pizza pizza : order.getPizzas()) {
+                // Prepare the toppings list as a string
                 String toppingsList = pizza.getToppings().isEmpty() ? "No toppings" : String.join(", ", pizza.getToppings().toString());
+    
+                // Create a label for each pizza's details
                 String pizzaDetails = String.format("Style: %s\nType: %s\nSize: %s\nCrust: %s\nToppings: %s\nPrice: $%.2f",
                         pizza.getClass().getSimpleName(),
                         pizza.getClass().getSimpleName(),
@@ -222,9 +225,20 @@ public class PizzaController {
                         pizza.getCrust(),
                         toppingsList,
                         pizza.price());
-                
+    
                 Label pizzaLabel = new Label(pizzaDetails);
                 orderLayout.getChildren().add(pizzaLabel);
+    
+                // Add a "Remove" button next to each pizza
+                Button removeButton = new Button("Remove");
+                removeButton.setOnAction(e -> {
+                    // Remove the pizza from the order and update the UI
+                    order.removePizza(pizza);
+                    // Refresh the order details view
+                    onCurrentOrderButtonClicked(); // This reopens the order window
+                    orderStage.close(); // Close the current order window
+                });
+                orderLayout.getChildren().add(removeButton);
             }
     
             // Add subtotal, tax, and total price
