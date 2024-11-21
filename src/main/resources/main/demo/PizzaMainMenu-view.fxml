@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" prefHeight="800.0" prefWidth="800.0" spacing="30.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.demo.PizzaController">
+<VBox alignment="CENTER" spacing="30.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.demo.PizzaController">
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
@@ -16,7 +16,7 @@
     </Label>
 
     <!-- Main Grid with Buttons -->
-    <GridPane prefHeight="600.0" prefWidth="700.0" alignment="CENTER" hgap="40.0" vgap="40.0">
+    <GridPane alignment="CENTER" hgap="40.0" vgap="40.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="300.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="200.0" prefWidth="300.0" />
@@ -38,7 +38,7 @@
         </Button>
 
         <!-- Current Order Button -->
-        <Button fx:id="currentOrderButton" contentDisplay="TOP" onAction="#onCurrentOrderButtonClicked" text="Current Order" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" style="-fx-font-size: 18px;">
+        <Button fx:id="currentOrderButton" contentDisplay="TOP" onAction="#handleCurrentOrder" text="Current Order" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" style="-fx-font-size: 18px;">
             <graphic>
                 <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -49,7 +49,7 @@
         </Button>
 
         <!-- Send Orders Button -->
-        <Button fx:id="onStoreOrdersButton" contentDisplay="TOP" onAction="#onSendOrdersButton" text="Send Orders" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" style="-fx-font-size: 18px;">
+        <Button fx:id="displayOrdersButton" contentDisplay="TOP" onAction="#handleOrders" text="Manage Orders" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" style="-fx-font-size: 18px;">
             <graphic>
                 <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                     <image>

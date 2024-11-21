@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"main.demo","l":"ClinicManagerController"},{"p":"main.demo","l":"ClinicManagerMain"}];updateSearchResults();

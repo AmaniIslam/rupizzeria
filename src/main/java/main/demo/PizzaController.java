@@ -2,14 +2,17 @@ package main.demo;
 
 import files.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -53,7 +56,7 @@ public class PizzaController {
 
         // Step 1: Pizza style selection
         Label styleLabel = new Label("Choose your pizza style:");
-        ComboBox<String> styleComboBox = new ComboBox<>(FXCollections.observableArrayList("Chicago Style", "New York Style"));
+        ComboBox<PizzaStyle> styleComboBox = new ComboBox<>(FXCollections.observableArrayList(PizzaStyle.values()));
 
         // Step 2: Pizza type selection
         Label typeLabel = new Label("Choose your pizza type:");
@@ -72,18 +75,12 @@ public class PizzaController {
             }
 
             // Proceed to the next window
-            String styleTextString = styleComboBox.getValue();
-            PizzaStyle style;
-            if (styleTextString == "Chicago Style"){
-                style = PizzaStyle.CHICAGO;
-            }else {
-                style = PizzaStyle.NEW_YORK;
-            }
+            PizzaStyle style = styleComboBox.getValue();
             String type = typeComboBox.getValue();
             Size size = sizeComboBox.getValue();
             Pizza current = null;
 
-            if (style.equals("Chicago Style")){
+            if (style.equals(PizzaStyle.CHICAGO)){
                 ChicagoPizza za = new ChicagoPizza();
                 current = switch (type) {
                     case ("Deluxe") -> za.createDeluxe(style, size);
@@ -104,7 +101,7 @@ public class PizzaController {
                 };
             }
 
-            openCustomizationWindow(current, styleTextString, type);
+            openCustomizationWindow(current, style, type);
             primaryStage.close(); // Close the current selection window
         });
 
@@ -117,7 +114,7 @@ public class PizzaController {
         primaryStage.show();
     }
 
-    private void openCustomizationWindow(Pizza current, String style, String type) {
+    private void openCustomizationWindow(Pizza current, PizzaStyle style, String type) {
         Stage customizationStage = new Stage();
         customizationStage.setTitle("Customize Your Pizza");
 
@@ -131,8 +128,7 @@ public class PizzaController {
 
         try {
             // Dynamically set the image path
-            String imagePath = "/images/" + type.toLowerCase().replace(" ", "") + ".png";
-            System.out.println(imagePath);
+            String imagePath = "/main/demo/images/" + type.toLowerCase().replace(" ", "") + ".png";
             Image pizzaImage = new Image(getClass().getResourceAsStream(imagePath));
             pizzaImageView.setImage(pizzaImage);
         } catch (Exception ignored) {
@@ -141,7 +137,7 @@ public class PizzaController {
 
         // Display basic pizza details
         Label pizzaDetails = new Label("Pizza Details:");
-        Label selectedDetails = new Label("Style: " + style + "\nType: " + type + "\nCrust: " + current.getCrust() + "\nSize: " + current.getSize());
+        Label selectedDetails = new Label("Style: " + style.toString() + "\nType: " + type + "\nCrust: " + current.getCrust() + "\nSize: " + current.getSize());
         Label ingredientsLabel = new Label("Toppings: ");
         Label priceLabel = new Label("Price: $" + String.format("%.2f", current.price()));
         AtomicReference<Pizza> tempPizza = new AtomicReference<>(current);
@@ -149,33 +145,56 @@ public class PizzaController {
         // For Build Your Own (BYO) pizzas, show toppings customization
         if (current instanceof BuildYourOwn) {
             Label toppingsLabel = new Label("Add or remove toppings (Max 7):");
-            FlowPane toppingsPane = new FlowPane(10, 10);
-            toppingsPane.setPadding(new Insets(10));
-            toppingsPane.setPrefWrapLength(400);
+
+            // Create a ListView for available toppings (left side)
+            ListView<Topping> toppingsListView = new ListView<>();
+            toppingsListView.getItems().addAll(Topping.values()); // Add all available toppings
+            toppingsListView.setPrefSize(200, 150); // Set a preferred size for the ListView
+            toppingsListView.setMaxHeight(150); // Ensure the ListView is visible
+
+            // Create a ListView for selected toppings (right side)
+            ListView<Topping> addedToppingsListView = new ListView<>();
+            addedToppingsListView.setPrefSize(200, 150); // Set a preferred size for the ListView
+            addedToppingsListView.setMaxHeight(150); // Ensure the ListView is visible
 
             ArrayList<Topping> addedToppings = new ArrayList<>();
-            for (Topping topping : Topping.values()) {
-                CheckBox checkBox = new CheckBox(topping.toString());
-                checkBox.setSelected(addedToppings.contains(topping)); // Pre-check existing toppings
-                checkBox.setOnAction(e -> {
-                    if (checkBox.isSelected()) {
-                        if (addedToppings.size() < 7) {
-                            addedToppings.add(topping);
-                        } else {
-                            checkBox.setSelected(false);
-                            showError("Maximum 7 toppings allowed.");
-                        }
-                    } else {
-                        addedToppings.remove(topping);
-                    }
-                    // Update pizza price based on toppings
-                    tempPizza.set(new BuildYourOwn(current.getSize(), addedToppings));
-                    priceLabel.setText("Price: $" + String.format("%.2f", tempPizza.get().price()));
-                });
-                toppingsPane.getChildren().add(checkBox);
-            }
+            Button addButton = new Button("Add");
+            Button removeButton = new Button("Remove");
 
-            root.getChildren().addAll(toppingsLabel, toppingsPane);
+            // Add button action: Add selected topping to the right ListView
+            addButton.setOnAction(e -> {
+                Topping selectedTopping = toppingsListView.getSelectionModel().getSelectedItem();
+                if (selectedTopping != null && !addedToppings.contains(selectedTopping)) {
+                    if (addedToppings.size() < 7) {
+                        addedToppings.add(selectedTopping);
+                        addedToppingsListView.getItems().add(selectedTopping); // Add to right ListView
+                        toppingsListView.getSelectionModel().clearSelection(); // Clear selection on left
+                    } else {
+                        showError("Maximum 7 toppings allowed.");
+                    }
+                }
+            });
+
+            // Remove button action: Remove selected topping from the right ListView
+            removeButton.setOnAction(e -> {
+                Topping selectedTopping = addedToppingsListView.getSelectionModel().getSelectedItem();
+                if (selectedTopping != null) {
+                    addedToppings.remove(selectedTopping);
+                    addedToppingsListView.getItems().remove(selectedTopping); // Remove from right ListView
+                }
+            });
+
+            // Update pizza price based on added toppings
+            addedToppingsListView.getItems().addListener((ListChangeListener<? super Topping>) c -> {
+                tempPizza.set(new BuildYourOwn(style, current.getSize(), addedToppings));
+                priceLabel.setText("Price: $" + String.format("%.2f", tempPizza.get().price()));
+            });
+
+            // Add elements to root layout (toppings ListView, buttons, and selected ListView)
+            HBox toppingsBox = new HBox(10);
+            toppingsBox.getChildren().addAll(toppingsListView, addButton, removeButton, addedToppingsListView); // Place all controls side by side
+            root.getChildren().addAll(toppingsLabel, toppingsBox);
+
         } else {
             // For non-BYO pizzas, show fixed ingredients
             ingredientsLabel.setText("Toppings: " + current.getToppings());
@@ -185,7 +204,6 @@ public class PizzaController {
         Button finalizeButton = new Button("Add to Order");
         finalizeButton.setOnAction(e -> {
             showAlert("Order Confirmation", "Your pizza has been added to the order!");
-            // Add the pizza to the order here (e.g., orderList.add(current))
             order.addPizza(tempPizza.get());
             customizationStage.close();
         });
@@ -194,7 +212,7 @@ public class PizzaController {
         root.getChildren().addAll(pizzaImageView, pizzaDetails, selectedDetails, ingredientsLabel, priceLabel, finalizeButton);
 
         // Show customization stage
-        Scene scene = new Scene(root, 500, 400);
+        Scene scene = new Scene(root, 600, 400);
         customizationStage.setScene(scene);
         customizationStage.show();
     }
@@ -208,7 +226,7 @@ public class PizzaController {
 
     // This method is called when the "Current Order" button is clicked
     @FXML
-    private void onCurrentOrderButtonClicked() {
+    private void handleCurrentOrder() {
         Stage orderStage = new Stage();
         orderStage.setTitle("Current Orders");
     
@@ -246,7 +264,7 @@ public class PizzaController {
                     // Remove the pizza from the order and update the UI
                     order.removePizza(pizza);
                     // Refresh the order details view
-                    onCurrentOrderButtonClicked(); // This reopens the order window
+                    handleCurrentOrder(); // This reopens the order window
                     orderStage.close(); // Close the current order window
                 });
                 orderLayout.getChildren().add(removeButton);
@@ -256,13 +274,33 @@ public class PizzaController {
             Label subtotalLabel = new Label("Subtotal: $" + String.format("%.2f", order.getSubtotal()));
             Label taxLabel = new Label("Tax: $" + String.format("%.2f", order.getTax()));
             Label totalLabel = new Label("Total: $" + String.format("%.2f", order.getTotal()));
-    
-            orderLayout.getChildren().addAll(subtotalLabel, taxLabel, totalLabel);
+
+
+            // Add a "Clear Order" button to remove all pizzas
+            Button clearOrderButton = new Button("Clear Order");
+            clearOrderButton.setOnAction(e -> {
+                order = new Order(order.getNumber());
+                handleCurrentOrder(); // Refresh the order details view
+                orderStage.close(); // Close the current order window
+            });
+
+            Button placeOrderButton = new Button("Place Order");
+            placeOrderButton.setOnAction(e -> {
+                // Simulate placing the order (this can be extended to save to database or send to another system)
+                showAlert("Order Placed", "Your order has been successfully placed!");
+                orders.add(order);
+                order = new Order(order.getNumber()+1);
+                orderStage.close(); // Close the order window
+            });
+
+
+            orderLayout.getChildren().addAll(subtotalLabel, taxLabel, totalLabel, clearOrderButton, placeOrderButton);
         }
-    
+
+
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> orderStage.close());
-        orderLayout.getChildren().add(closeButton);
+        orderLayout.getChildren().addAll(closeButton);
     
         Scene orderScene = new Scene(orderLayout, 400, 300);
         orderStage.setScene(orderScene);
@@ -270,45 +308,141 @@ public class PizzaController {
         //showAlert("Current Order", "You clicked on the Current Order button!");
     }
 
-    // This method is called when the "Send Orders" button is clicked
     @FXML
-    private void onSendOrdersButton() {
+    private void handleOrders() {
+        if (orders.isEmpty()) { // Check if there are no orders
+            showAlert("No Orders Found", "There are no orders to display.");
+            return;
+        }
+
+        Stage ordersStage = new Stage();
+        ordersStage.setTitle("Manage Orders");
+
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(15));
+
+        Label header = new Label("Manage Orders");
+        header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        root.getChildren().add(header);
+
+        ScrollPane scrollPane = new ScrollPane();
+        VBox ordersList = new VBox(10);
+        scrollPane.setContent(ordersList);
+
+        for (Order order : orders) {
+            VBox orderBox = new VBox(5);
+            orderBox.setPadding(new Insets(10));
+            orderBox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: #f4f4f4;");
+
+            Label orderLabel = new Label("Order Number: " + order.getNumber());
+            orderLabel.setStyle("-fx-font-weight: bold;");
+            orderBox.getChildren().add(orderLabel);
+
+            for (Pizza pizza : order.getPizzas()) {
+                String toppingsList = pizza.getToppings().isEmpty()
+                        ? "No toppings"
+                        : String.join(", ", pizza.getToppings().toString());
+
+                Label pizzaDetails = new Label(String.format(
+                        "Type: %s, Size: %s, Crust: %s, Toppings: %s, Price: $%.2f",
+                        pizza.getClass().getSimpleName(),
+                        pizza.getSize(),
+                        pizza.getCrust(),
+                        toppingsList,
+                        pizza.price()
+                ));
+                orderBox.getChildren().add(pizzaDetails);
+            }
+
+            Label totalLabel = new Label("Total Price: $" + String.format("%.2f", order.getTotal()));
+            orderBox.getChildren().add(totalLabel);
+
+            HBox buttonsBox = new HBox(10);
+            buttonsBox.setAlignment(Pos.CENTER);
+
+            // Cancel Order Button
+            Button cancelButton = new Button("Cancel Order");
+            cancelButton.setOnAction(e -> {
+                orders.remove(order); // Remove the order from the list
+                handleOrders(); // Refresh the view
+                ordersStage.close(); // Close the current stage
+            });
+
+            buttonsBox.getChildren().addAll(cancelButton);
+            orderBox.getChildren().add(buttonsBox);
+            ordersList.getChildren().add(orderBox);
+        }
+
+        // Export Button
+        Button exportButton = new Button("Export Orders");
+        exportButton.setOnAction(e -> {
+            exportOrders();
+        });
+
+        root.getChildren().addAll(scrollPane, exportButton);
+
+        Scene scene = new Scene(root, 500, 600);
+        ordersStage.setScene(scene);
+        ordersStage.show();
+    }
+
+    private void exportOrders() {
+        if (orders.isEmpty()) { // Check if there are no orders
+            showAlert("No Orders Found", "There are no orders to export.");
+            return;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
-    
+
         if (file != null) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                writer.write("Order Number: " + order.getNumber());
-                writer.newLine();
-                writer.write("Pizzas in Order:");
-                writer.newLine();
-                
-                // Iterate through each pizza in the order and write its details to the file
-                for (Pizza pizza : order.getPizzas()) {
-                    writer.write("Type: " + pizza.getClass().getSimpleName());
+                // Iterate through all orders in the ArrayList
+                for (Order order : orders) { // Replace 'allOrders' with your ArrayList of orders
+                    writer.write("Order Number: " + order.getNumber());
                     writer.newLine();
-                    writer.write("Size: " + pizza.getSize());
+                    writer.write("Pizzas in Order:");
                     writer.newLine();
-                    writer.write("Crust: " + pizza.getCrust());
+
+                    // Iterate through each pizza in the current order and write its details
+                    for (Pizza pizza : order.getPizzas()) {
+                        writer.write("Type: " + pizza.getClass().getSimpleName());
+                        writer.newLine();
+                        writer.write("Size: " + pizza.getSize());
+                        writer.newLine();
+                        writer.write("Crust: " + pizza.getCrust());
+                        writer.newLine();
+
+                        // Format toppings nicely
+                        String toppingsList = pizza.getToppings().isEmpty()
+                                ? "No toppings"
+                                : String.join(", ", pizza.getToppings().toString());
+                        writer.write("Toppings: " + toppingsList);
+                        writer.newLine();
+
+                        writer.write("Price: $" + String.format("%.2f", pizza.price()));
+                        writer.newLine();
+                        writer.newLine();
+                    }
+
+                    writer.write("Subtotal: $" + String.format("%.2f", order.getSubtotal()));
                     writer.newLine();
-                    writer.write("Toppings: " + pizza.getToppings());
+                    writer.write("Tax: $" + String.format("%.2f", order.getTax()));
                     writer.newLine();
-                    writer.write("Price: $" + String.format("%.2f", pizza.price()));
+                    writer.write("Total Price: $" + String.format("%.2f", order.getTotal()));
                     writer.newLine();
+                    writer.write("=======================================");
                     writer.newLine();
                 }
-                
-                writer.write("Total Price: $" + String.format("%.2f", order.getTotalPrice()));
-                writer.newLine();
-                
-                showAlert("Order Exported", "Your order has been successfully exported to " + file.getName());
+
+                showAlert("Orders Exported", "All orders have been successfully exported to " + file.getName());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        //showAlert("Store Orders", "You clicked on the Store Orders button!");
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(AlertType.INFORMATION);
