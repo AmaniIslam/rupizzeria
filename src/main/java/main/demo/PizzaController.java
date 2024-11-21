@@ -11,9 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -259,10 +264,44 @@ public class PizzaController {
         //showAlert("Current Order", "You clicked on the Current Order button!");
     }
 
-    // This method is called when the "Store Orders" button is clicked
+    // This method is called when the "Send Orders" button is clicked
     @FXML
-    private void onStoreOrdersButtonClicked() {
-        showAlert("Store Orders", "You clicked on the Store Orders button!");
+    private void onSendOrdersButton() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        File file = fileChooser.showSaveDialog(null);
+    
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                writer.write("Order Number: " + order.getNumber());
+                writer.newLine();
+                writer.write("Pizzas in Order:");
+                writer.newLine();
+                
+                // Iterate through each pizza in the order and write its details to the file
+                for (Pizza pizza : order.getPizzas()) {
+                    writer.write("Type: " + pizza.getClass().getSimpleName());
+                    writer.newLine();
+                    writer.write("Size: " + pizza.getSize());
+                    writer.newLine();
+                    writer.write("Crust: " + pizza.getCrust());
+                    writer.newLine();
+                    writer.write("Toppings: " + pizza.getToppings());
+                    writer.newLine();
+                    writer.write("Price: $" + String.format("%.2f", pizza.price()));
+                    writer.newLine();
+                    writer.newLine();
+                }
+                
+                writer.write("Total Price: $" + String.format("%.2f", order.getTotalPrice()));
+                writer.newLine();
+                
+                showAlert("Order Exported", "Your order has been successfully exported to " + file.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //showAlert("Store Orders", "You clicked on the Store Orders button!");
     }
 
     private void showAlert(String title, String message) {

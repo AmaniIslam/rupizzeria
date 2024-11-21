@@ -61,8 +61,8 @@
                         </graphic>
                     </Button>
 
-                    <!-- Store Orders Button -->
-                    <Button fx:id="storeOrdersButton" contentDisplay="TOP" onAction="#onStoreOrdersButtonClicked" text="Store Orders" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                    <!-- Send Orders Button -->
+                    <Button fx:id="onStoreOrdersButton" contentDisplay="TOP" onAction="#onSendOrdersButton" text="Send Orders" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                         <graphic>
                             <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                 <image>
