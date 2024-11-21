@@ -6,7 +6,7 @@ public class Order {
 
     private int number;
     private ArrayList<Pizza> pizzas;
-    private final double TAX_RATE = 0.625;
+    private final double TAX_RATE = 0.0625;
     public Order(int number) {
         this.number = number;
         this.pizzas = new ArrayList<>();
