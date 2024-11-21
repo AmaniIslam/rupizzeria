@@ -72,7 +72,13 @@ public class PizzaController {
             }
 
             // Proceed to the next window
-            String style = styleComboBox.getValue();
+            String styleTextString = styleComboBox.getValue();
+            PizzaStyle style;
+            if (styleTextString == "Chicago Style"){
+                style = PizzaStyle.CHICAGO;
+            }else {
+                style = PizzaStyle.NEW_YORK;
+            }
             String type = typeComboBox.getValue();
             Size size = sizeComboBox.getValue();
             Pizza current = null;
@@ -80,25 +86,25 @@ public class PizzaController {
             if (style.equals("Chicago Style")){
                 ChicagoPizza za = new ChicagoPizza();
                 current = switch (type) {
-                    case ("Deluxe") -> za.createDeluxe(size);
-                    case ("Meatzza") -> za.createMeatzza(size);
-                    case ("BBQ Chicken") -> za.createBBQChicken(size);
-                    case ("Build Your Own") -> za.createBuildYourOwn(size, null);
+                    case ("Deluxe") -> za.createDeluxe(style, size);
+                    case ("Meatzza") -> za.createMeatzza(style, size);
+                    case ("BBQ Chicken") -> za.createBBQChicken(style, size);
+                    case ("Build Your Own") -> za.createBuildYourOwn(style, size, null);
                     default -> current;
                 };
             }
             else {
                 NYPizza za = new NYPizza();
                 current = switch (type) {
-                    case ("Deluxe") -> za.createDeluxe(size);
-                    case ("Meatzza") -> za.createMeatzza(size);
-                    case ("BBQ Chicken") -> za.createBBQChicken(size);
-                    case ("Build Your Own") -> za.createBuildYourOwn(size, null);
+                    case ("Deluxe") -> za.createDeluxe(style, size);
+                    case ("Meatzza") -> za.createMeatzza(style, size);
+                    case ("BBQ Chicken") -> za.createBBQChicken(style, size);
+                    case ("Build Your Own") -> za.createBuildYourOwn(style, size, null);
                     default -> current;
                 };
             }
 
-            openCustomizationWindow(current, style, type);
+            openCustomizationWindow(current, styleTextString, type);
             primaryStage.close(); // Close the current selection window
         });
 

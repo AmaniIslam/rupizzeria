@@ -8,8 +8,16 @@ public class Meatzza extends Pizza {
     private final double MEDIUM = 19.99;
     private final double LARGE = 21.99;
     
-    public Meatzza(Size size) {
-        super(size, Crust.STUFFED, createToppings());
+    public Meatzza(PizzaStyle style, Size size) {
+        super(style, size, getCrustBasedOnStyle(style), createToppings());
+    }
+
+    public static Crust getCrustBasedOnStyle(PizzaStyle style) {
+        if (style == PizzaStyle.CHICAGO){
+            return Crust.STUFFED;
+        } else {
+            return Crust.HAND_TOSSED;
+        }
     }
 
     private static ArrayList<Topping> createToppings() {

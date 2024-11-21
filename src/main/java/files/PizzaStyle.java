@@ -1,5 +1,5 @@
 package files;
 
-public enum Style {
+public enum PizzaStyle {
     CHICAGO, NEW_YORK;
 }

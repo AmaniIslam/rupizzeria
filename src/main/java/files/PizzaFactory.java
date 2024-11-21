@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public interface PizzaFactory {
 
-    Pizza createDeluxe(Size size);
+    Pizza createDeluxe(PizzaStyle style, Size size);
 
-    Pizza createMeatzza(Size size);
+    Pizza createMeatzza(PizzaStyle style, Size size);
 
-    Pizza createBBQChicken(Size size);
+    Pizza createBBQChicken(PizzaStyle style, Size size);
 
-    Pizza createBuildYourOwn(Size size, ArrayList<Topping> toppings);
+    Pizza createBuildYourOwn(PizzaStyle style, Size size, ArrayList<Topping> toppings);
 }

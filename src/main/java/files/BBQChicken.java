@@ -8,8 +8,16 @@ public class BBQChicken extends Pizza {
     private final double MEDIUM = 16.99;
     private final double LARGE = 19.99;
 
-    public BBQChicken(Size size) {
-        super(size, Crust.PAN, createToppings());
+    public BBQChicken(PizzaStyle style, Size size) {
+        super(style, size, getCrustBasedOnStyle(style), createToppings());
+    }
+
+    public static Crust getCrustBasedOnStyle(PizzaStyle style) {
+        if (style == PizzaStyle.CHICAGO){
+            return Crust.PAN;
+        } else {
+            return Crust.THIN;
+        }
     }
 
     private static ArrayList<Topping> createToppings() {

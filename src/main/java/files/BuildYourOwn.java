@@ -10,11 +10,17 @@ public class BuildYourOwn extends Pizza {
     private final double LARGE = 12.99;
     private ArrayList<Topping> toppings;
 
-
-
-    public BuildYourOwn(Size size, ArrayList<Topping> toppings) {
-        super(size, Crust.PAN, toppings);
+    public BuildYourOwn(PizzaStyle style, Size size, ArrayList<Topping> toppings) {
+        super(style, size, getCrustBasedOnStyle(style), toppings);
         this.toppings = toppings;
+    }
+
+    public static Crust getCrustBasedOnStyle(PizzaStyle style) {
+        if (style == PizzaStyle.CHICAGO){
+            return Crust.PAN;
+        } else {
+            return Crust.HAND_TOSSED;
+        }
     }
 
     @Override

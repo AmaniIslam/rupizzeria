@@ -7,8 +7,16 @@ public class Deluxe extends Pizza {
     private final double MEDIUM = 18.99;
     private final double LARGE = 20.99;
 
-    public Deluxe(Size size) {
-        super(size, Crust.DEEP_DISH, createToppings());
+    public Deluxe(PizzaStyle style, Size size) {
+        super(style, size, getCrustBasedOnStyle(style), createToppings());
+    }
+
+    public static Crust getCrustBasedOnStyle(PizzaStyle style) {
+        if (style == PizzaStyle.CHICAGO){
+            return Crust.DEEP_DISH;
+        } else {
+            return Crust.BROOKLYN;
+        }
     }
 
     private static ArrayList<Topping> createToppings() {
