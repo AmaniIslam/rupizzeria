@@ -200,13 +200,13 @@ public class PizzaController {
     private void onCurrentOrderButtonClicked() {
         Stage orderStage = new Stage();
         orderStage.setTitle("Current Orders");
-
+    
         VBox orderLayout = new VBox(10);
         orderLayout.setPadding(new Insets(15));
-
+    
         Label headerLabel = new Label("Current Order Details:");
         orderLayout.getChildren().add(headerLabel);
-
+    
         // If there are no pizzas in the order, display a message
         if (order.getPizzas().isEmpty()) {
             Label noPizzasLabel = new Label("No pizzas have been added to the order yet.");
@@ -214,13 +214,10 @@ public class PizzaController {
         } else {
             // Otherwise, iterate through the pizzas in the order and display their details
             for (Pizza pizza : order.getPizzas()) {
-                // Prepare the toppings list as a string
                 String toppingsList = pizza.getToppings().isEmpty() ? "No toppings" : String.join(", ", pizza.getToppings().toString());
-
-                // Create a label for each pizza's details
                 String pizzaDetails = String.format("Style: %s\nType: %s\nSize: %s\nCrust: %s\nToppings: %s\nPrice: $%.2f",
-                        pizza.getClass().getSimpleName(), // Class name as style/type (assuming style is derived from the class name)
-                        pizza.getClass().getSimpleName(), // Same here for pizza type (could be more specific if needed)
+                        pizza.getClass().getSimpleName(),
+                        pizza.getClass().getSimpleName(),
                         pizza.getSize(),
                         pizza.getCrust(),
                         toppingsList,
@@ -229,14 +226,19 @@ public class PizzaController {
                 Label pizzaLabel = new Label(pizzaDetails);
                 orderLayout.getChildren().add(pizzaLabel);
             }
+    
+            // Add subtotal, tax, and total price
+            Label subtotalLabel = new Label("Subtotal: $" + String.format("%.2f", order.getSubtotal()));
+            Label taxLabel = new Label("Tax: $" + String.format("%.2f", order.getTax()));
+            Label totalLabel = new Label("Total: $" + String.format("%.2f", order.getTotal()));
+    
+            orderLayout.getChildren().addAll(subtotalLabel, taxLabel, totalLabel);
         }
-
-        // Add a "Close" button to close the order window
+    
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> orderStage.close());
         orderLayout.getChildren().add(closeButton);
-
-        // Set up the scene and show the window
+    
         Scene orderScene = new Scene(orderLayout, 400, 300);
         orderStage.setScene(orderScene);
         orderStage.show();

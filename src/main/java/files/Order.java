@@ -6,6 +6,7 @@ public class Order {
 
     private int number;  // Order number
     private ArrayList<Pizza> pizzas;  // List of pizzas in this order
+    private final double TAX_RATE = 0.07; // Example: 7% tax rate
 
     public Order(int number) {
         this.number = number;
@@ -28,11 +29,27 @@ public class Order {
         pizzas.remove(pizza);
     }
 
-    public double getTotalPrice() {
-        double total = 0;
+    // Get the total price of the order (subtotal only)
+    public double getSubtotal() {
+        double subtotal = 0;
         for (Pizza pizza : pizzas) {
-            total += pizza.price();
+            subtotal += pizza.price();
         }
-        return total;
+        return subtotal;
+    }
+
+    // Calculate tax based on subtotal
+    public double getTax() {
+        return getSubtotal() * TAX_RATE;
+    }
+
+    // Calculate the total price (subtotal + tax)
+    public double getTotal() {
+        return getSubtotal() + getTax();
+    }
+
+    // Get the total price of the order
+    public double getTotalPrice() {
+        return getTotal();  // You can still use this if you prefer it to return the full total
     }
 }
